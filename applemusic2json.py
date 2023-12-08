@@ -13,12 +13,15 @@ def main():
     # Parse one argument: the playlist URL
     parser = argparse.ArgumentParser(description='Convert Apple Music playlist to a JSON file')
     parser.add_argument('playlist_url', help='Apple Music playlist URL')
+    parser.add_argument('-r', '--reverse', action='store_true', help='reverse the order of the songs')
     args = parser.parse_args()
 
     playlist_url = args.playlist_url
 
     print(f'Getting playlist from Apple Music...', file=sys.stderr)
     songs = get_songs_from_apple_playlist(playlist_url)
+    if args.reverse:
+        songs.reverse()
 
     json.dump(songs, sys.stdout, indent=4)
 
