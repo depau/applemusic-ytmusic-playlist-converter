@@ -8,6 +8,11 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
+YELLOW = '\033[33m'
+GREEN = '\033[32m'
+RED = '\033[31m'
+RESET = '\033[0m'
+
 
 def main():
     # Parse one argument: the playlist URL
@@ -25,7 +30,7 @@ def main():
 
     json.dump(songs, sys.stdout, indent=4)
 
-    print(f'\033[32m Done!\033[0m', file=sys.stderr)
+    print(f'{GREEN} Done!{RESET}', file=sys.stderr)
 
 
 def get_songs_from_apple_playlist(playlist_url):
@@ -33,13 +38,20 @@ def get_songs_from_apple_playlist(playlist_url):
 
     # Check if the request was successful
     if r.status_code != 200:
-        print(f'\033[31m there was an error while getting playlist from Apple Music: {r.text} ({r.status_code})')
+        print(f'{RED} there was an error while getting playlist from Apple Music: {r.text} ({r.status_code}){RESET}',
+              file=sys.stderr)
         pass
 
     bellazuppa = BeautifulSoup(r.content, 'html.parser')
     script_tag = bellazuppa.find("script", {"id": "serialized-server-data"})
 
     j = json.loads(script_tag.text)
+
+    try:
+        print(f'{YELLOW} Found playlist "{j[0]["data"]["seoData"]["schemaContent"]["name"]}" '
+              f'by {j[0]["data"]["seoData"]["schemaContent"]["author"]["name"]}{RESET}', file=sys.stderr)
+    except KeyError:
+        pass
 
     # JQ query: '.[].data.sections[1].items[] | ([.title, .artistName, .tertiaryLinks[0].title])'
     songs = []

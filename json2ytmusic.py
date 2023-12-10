@@ -30,6 +30,8 @@ def main():
     # noinspection PyTypeChecker
     dst_playlist = yt.get_playlist(args.playlist_id, limit=None)
 
+    print(f'{YELLOW} Adding new songs to playlist "{dst_playlist["title"]}" by {dst_playlist["author"]["name"]}{RESET}')
+
     # Read the Apple Music playlist
     src_playlist = json.load(args.input)
 
