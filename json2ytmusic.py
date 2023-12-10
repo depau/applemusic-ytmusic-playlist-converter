@@ -46,11 +46,12 @@ def main():
 
             query = f'{title} {artist}'
 
-            if query in cache and cache[query] not in existing and cache[query] not in to_add:
-                # print the line in yellow
-                print(f'{YELLOW} {title} - {artist} '.ljust(60, ' '), end='')
-                print(f'-> cached: {cache[query]}{RESET}')
-                to_add.append(cache[query])
+            if query in cache:
+                if cache[query] not in existing and cache[query] not in to_add:
+                    # print the line in yellow
+                    print(f'{YELLOW} {title} - {artist} '.ljust(60, ' '), end='')
+                    print(f'-> cached: {cache[query]}{RESET}')
+                    to_add.append(cache[query])
                 continue
 
             results = yt.search(query, filter='songs', limit=5)
@@ -71,7 +72,7 @@ def main():
         with open(args.cache, 'w') as f:
             json.dump(cache, f, indent=4)
 
-    print(f'{YELLOW} Adding {len(to_add)} songs...{RESET}')
+    print(f'{YELLOW} Adding {len(to_add)} new songs...{RESET}')
 
     if len(to_add) > 0:
         yt.add_playlist_items(args.playlist_id, videoIds=to_add)
