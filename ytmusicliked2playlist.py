@@ -38,7 +38,8 @@ def main():
     print(f'Adding {len(to_add)} songs to playlist "{dst_playlist["title"]}" by {dst_playlist["author"]["name"]}',
           file=sys.stderr)
 
-    yt.add_playlist_items(playlist_id, to_add)
+    if len(to_add) > 0:
+        yt.add_playlist_items(playlist_id, to_add)
 
 
 if __name__ == '__main__':
