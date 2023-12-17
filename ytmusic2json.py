@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import os
 import sys
 
 from ytmusicapi import YTMusic
@@ -24,7 +25,15 @@ def main():
 
     args = parser.parse_args()
 
-    yt = YTMusic(args.oauth)
+    if not os.path.exists(args.oauth):
+        if args.playlist_id == 'likedmusic':
+            print(f'{RED} OAuth file not found, cannot read liked music{RESET}', file=sys.stderr)
+            sys.exit(1)
+        oauth = None
+    else:
+        oauth = args.oauth
+
+    yt = YTMusic(oauth)
 
     print(f'Getting playlist from YouTube Music...', file=sys.stderr)
 
@@ -48,7 +57,7 @@ def main():
             'title': track['title'],
             'artist': ", ".join((i["name"] for i in (track.get('artists') or []))),
             'album': (track['album'] or {}).get('name'),
-            'duration': (track.get('duration_seconds', 0) * 1000) or None,            'videoId': track['videoId'],
+            'duration': (track.get('duration_seconds', 0) * 1000) or None, 'videoId': track['videoId'],
         })
 
     json.dump(output, args.output, indent=4)
