@@ -46,11 +46,17 @@ def main():
             title = song['title']
             artist = song['artist']
 
+            if 'videoId' in song:
+                cache[f'{title} {artist}'] = song['videoId']
+                print(f'{GREEN} {title} - {artist} '.ljust(60, ' '), end='')
+                print(f'-> provided: {song["videoId"]}{RESET}')
+                to_add.append(song['videoId'])
+                continue
+
             query = f'{title} {artist}'
 
             if query in cache:
                 if cache[query] not in existing and cache[query] not in to_add:
-                    # print the line in yellow
                     print(f'{YELLOW} {title} - {artist} '.ljust(60, ' '), end='')
                     print(f'-> cached: {cache[query]}{RESET}')
                     to_add.append(cache[query])
