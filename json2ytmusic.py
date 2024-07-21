@@ -30,7 +30,7 @@ def main():
     # noinspection PyTypeChecker
     dst_playlist = yt.get_playlist(args.playlist_id, limit=None)
 
-    print(f'{YELLOW} Adding new songs to playlist "{dst_playlist["title"]}" by {dst_playlist["author"]["name"]}{RESET}')
+    print(f'{YELLOW} Adding new songs to playlist "{dst_playlist["title"]}"{(" by " + dst_playlist["author"]["name"]) if ("author" in dst_playlist and "name" in dst_playlist["author"]) else ""}{RESET}')
 
     # Read the Apple Music playlist
     src_playlist = json.load(args.input)
@@ -71,7 +71,7 @@ def main():
             best_result = results[0]
 
             print(f'{GREEN} {title} - {artist} '.ljust(60, ' '), end='')
-            print(f'-> {best_result["title"]} - {best_result["artists"][0]["name"]}{RESET}')
+            print(f'-> {best_result["title"]} - {best_result["artists"][0]["name"] if len(best_result["artists"]) else "" }{RESET}')
 
             if best_result['videoId'] not in existing and best_result['videoId'] not in to_add:
                 to_add.append(best_result['videoId'])
