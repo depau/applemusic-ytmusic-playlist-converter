@@ -35,7 +35,8 @@ def main():
         if song['videoId'] not in existing and song['videoId'] not in to_add:
             to_add.append(song['videoId'])
 
-    print(f'Adding {len(to_add)} songs to playlist "{dst_playlist["title"]}" by {dst_playlist["author"]["name"]}',
+    author = dst_playlist.get('author', {}).get('name', 'Unknown')
+    print(f'Adding {len(to_add)} songs to playlist "{dst_playlist["title"]}" by {author}',
           file=sys.stderr)
 
     if len(to_add) > 0:

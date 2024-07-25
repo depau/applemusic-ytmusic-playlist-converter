@@ -44,7 +44,8 @@ def main():
     else:
         # noinspection PyTypeChecker
         playlist = yt.get_playlist(args.playlist_id, limit=None)
-        print(f'{YELLOW} Found playlist "{playlist["title"]}" by {playlist["author"]["name"]}{RESET}', file=sys.stderr)
+        author = playlist.get('author', {}).get('name', 'Unknown')
+        print(f'{YELLOW} Found playlist "{playlist["title"]}" by {author}{RESET}', file=sys.stderr)
 
     tracks = list(playlist['tracks'])
     if args.reverse:
